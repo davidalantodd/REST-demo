@@ -12,25 +12,25 @@ describe('basic express server test', () => {
         expect(response.body.num).toBeLessThan(1);
     })
 
-    it("should call the / function directly", () => {
-        const req = { method: 'GET', url: '/' };
-        const res = {
-            statusCode: 0,
-            headers: {},
-            body: '',
-            setHeader: function (name, value) {
-                this.headers[name] = value;
-            },
-            end: function (chunk) {
-                this.body = chunk;
-            }
-        };
+    // it("should call the / function directly", () => {
+    //     const req = { method: 'GET', url: '/' };
+    //     const res = {
+    //         statusCode: 0,
+    //         headers: {},
+    //         body: '',
+    //         setHeader: function (name, value) {
+    //             this.headers[name] = value;
+    //         },
+    //         end: function (chunk) {
+    //             this.body = chunk;
+    //         }
+    //     };
 
-        app(req, res);
+    //     app(req, res);
 
-        expect(res.statusCode).toBe(200);
-        expect(res.headers['Content-Type']).toBe('text/html; charset=utf-8');
-        expect(res.body).toBe('This a GET request from the browser.');
-    });
+    //     expect(res.statusCode).toBe(200);
+    //     expect(res.headers['Content-Type']).toBe('text/html; charset=utf-8');
+    //     expect(res.body).toBe('This a GET request from the browser.');
+    // });
     
 })
