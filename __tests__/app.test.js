@@ -33,7 +33,7 @@ describe("User routes", () => {
             const response = await request(app).post("/user")
 
             expect(response.status).toBe(500)
-            expect(response.text).toContain("No user created")
+            expect(response.text).toContain("user creation failed")
         })
     })
 })

@@ -16,7 +16,8 @@ router.post("/", async (req, res, next) => {
         if (!user) {
             throw new Error("No user created");
         }
-        res.send(user.username);
+        // updated responses to be in JSON format
+        res.send({ user: user.username });
     } catch (error) {
         next(error);
     }
@@ -29,7 +30,7 @@ router.get("/", async (req, res, next) => {
         if (!users) {
             throw new Error("No users found");
         }
-        res.send(users);
+        res.send({ users });
     } catch (error) {
         next(error);
     }
@@ -45,7 +46,7 @@ router.get("/:username", async (req, res, next) => {
         if (!user) {
             throw new Error("No user found");
         }
-        res.send(user);
+        res.send({ user });
     } catch (error) {
         next(error);
     }
@@ -57,7 +58,7 @@ router.put("/:username", async (req, res, next) => {
         const updatedUser = await User.update(req.body, {
             where: { username: req.params.username}
         });
-        console.log(updatedUser)
+        console.log({ updatedUser })
         if (updatedUser[0] === 0) { // means that no records were updated, success would be something like [1]
             throw new Error("No update made");
         }
