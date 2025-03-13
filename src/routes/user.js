@@ -1,6 +1,9 @@
 // import Router from express, create an instance of router
 const { Router } = require("express")
 const router = Router()
+const checkPasswordStrength = require("../middleware/index")
+
+const { check, validationResult } = require('express-validator') 
 
 // const express = require("express")
 // const router = express.Router()
@@ -10,7 +13,7 @@ const User = require("../models/User")
 // change all instance of app to router
 
 // create a new user through POST request
-router.post("/", async (req, res, next) => {
+router.post("/", checkPasswordStrength, async (req, res, next) => {
     try {
         const user = await User.create(req.body);
         if (!user) {
@@ -53,17 +56,23 @@ router.get("/:username", async (req, res, next) => {
 })
 
 // update a user - PUT /:username request
-router.put("/:username", async (req, res, next) => {
+router.put("/:username", [check('username').not().isEmpty(), check('email').contains("@")], async (req, res, next) => {
     try {
-        const updatedUser = await User.update(req.body, {
-            where: { username: req.params.username}
-        });
-        console.log({ updatedUser })
-        if (updatedUser[0] === 0) { // means that no records were updated, success would be something like [1]
-            throw new Error("No update made");
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) { 
+            res.json({error: errors.array() })
+        } else {
+            const updatedUser = await User.update(req.body, {
+                where: { username: req.params.username}
+            });
+            console.log({ updatedUser })
+            if (updatedUser[0] === 0) { // means that no records were updated, success would be something like [1]
+                throw new Error("No update made");
+            }
         }
         res.sendStatus(200);
     } catch (error) {
+        console.error(erorr)
         next(error);
     }
 })

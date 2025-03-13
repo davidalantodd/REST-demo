@@ -11,7 +11,7 @@ describe("User routes", () => {
             //Arrange
             const userData = {
                 username: "testuser",
-                password: "testpassword",
+                password: "Testpassword!",
                 email: "testuser@email.com"
             }
             const userMock = { ...userData, _id: "mockedId" }
@@ -26,14 +26,14 @@ describe("User routes", () => {
             expect(User.create).toHaveBeenCalledWith(userData)
         })
 
-        it("should return 500 if user creation fails", async () => {
-            const error = new Error("user creation failed")
-            User.create.mockRejectedValue(error)
-
-            const response = await request(app).post("/user")
+        it("should return an error message if the password isn't strong", async () => {
+            const response = await request(app)
+                .post("/user")
+                .send({ password: "test" });
 
             expect(response.status).toBe(500)
-            expect(response.text).toContain("user creation failed")
+            expect(response.text).toContain("Password must contain at least one uppercase character and one special character.")
+
         })
     })
 })
